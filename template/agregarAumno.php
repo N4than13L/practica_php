@@ -33,16 +33,19 @@ if (!empty($_POST)) {
     $edad = $_POST["txtEdad"];
     $cuota = $_POST["txtCuota"];
 
+    $curso_id = $_POST["cboCurso"];
+    echo $curso_id;
+
     if (!empty($nombre && !empty($apellido) && !empty($edad) && !empty($cuota))) {
         $mysqli = call_mysqli();
         if ($idActualizar > 0) {
-            $sql = "UPDATE alumno SET nombre='$nombre', apellido='$apellido', edad='$edad', cuota='$cuota' WHERE id = '$idActualizar'";
+            $sql = "UPDATE alumno SET nombre='$nombre', apellido='$apellido', edad='$edad', cuota='$cuota', curso_id='$curso_id' WHERE id = '$idActualizar'";
         } else {
-            $sql = "INSERT INTO alumno (nombre, apellido, edad, cuota) VALUE('$nombre', '$apellido', '$edad', '$cuota')";
+            $sql = "INSERT INTO alumno (nombre, apellido, edad, cuota, curso_id) VALUE('$nombre', '$apellido', '$edad', '$cuota','$curso_id')";
         }
         $resPerfil = $mysqli->query($sql);
 
-        header("location: ./agregarAumno.php");
+        //header("location: ./agregarAumno.php");
     }
 }
 
@@ -102,15 +105,22 @@ if (!empty($_GET["id_borrado"])) {
         <input type="number" placeholder="agrega el cuota" value="<?php echo (isset($_GET['id']) ? $row['cuota'] : '') ?>" name="txtCuota" id="txtCuota" />
         <br />
         <br />
-        <label for="optCurso">curso:</label>
+        <label for="cboCurso">curso:</label>
 
-        <select>
+        <select name="cboCurso">
             <option value="0">Curso</option>
             <?php
             $query = $mysqli->query("SELECT * FROM curso");
             while ($valores = mysqli_fetch_array($query)) {
-                echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] .
-                    '</option>';
+                if (isset($_GET["id"])) {
+                    if (isset($_GET["curso_id"]) == isset($_GET["id"])) {
+                        echo '<option value="' . $valores['id'] . '" selected>' . $valores['nombre'] . '</option>';
+                    } else {
+                        echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] . '</option>';
+                    }
+                } else {
+                    echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] . '</option>';
+                }
             }
             ?>
         </select>
@@ -146,28 +156,77 @@ if (!empty($_GET["id_borrado"])) {
 
         <br />
         <br />
-        <input type="submit" value="Enviar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" />
 
         <button onclick="window.location.href='agregarAumno.php'" type="button" name="nuevo">Nuevo</button>
     </form>
 
+    <br />
 
-    <table style="border: 1px;">
+    <table border="1">
         <tr>
-            <th>Alumnos</th>
+            <!--- Ordenar columnas Principales --->
+            <th> Nombre</th>
+            <th> Apellido</th>
+            <th> Edad </th>
+            <th> Cuota </th>
+            <th> Eliminar alumno</th>
+
         </tr>
         <tr>
-            <th>
+            <!--- Sacar Nombre en su fila correspondiente --->
+            <td>
                 <?php
                 $query = $mysqli->query("SELECT * FROM alumno");
                 while ($valores = mysqli_fetch_array($query)) {
-                    echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . " " . $valores['nombre'] . " " . $valores["apellido"] . " " . $valores["edad"] . " años " . $valores["cuota"] . " DOP pesos " . "</a>";
-                    echo " " . "<a href='././agregarAumno.php?id_borrado=$valores[id]' </a>" . " borrar" . "</a>";
+                    echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . " " . $valores['nombre']  . "</a>";
                 }
                 ?>
-            </th>
+            </td>
+
+            <!--- Sacar Apellido en su fila correspondiente --->
+            <td>
+                <?php
+                $query = $mysqli->query("SELECT * FROM alumno");
+                while ($valores = mysqli_fetch_array($query)) {
+                    echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . " " . $valores["apellido"] . "</a>";
+                }
+                ?>
+            </td>
+
+            <!--- Sacar Edad en su fila correspondiente --->
+            <td>
+                <?php
+                $query = $mysqli->query("SELECT * FROM alumno");
+                while ($valores = mysqli_fetch_array($query)) {
+                    echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . " " . $valores["edad"] . " años" . "</a>";
+                }
+                ?>
+            </td>
+
+            <!--- Sacar Cuota en su fila correspondiente --->
+            <td>
+                <?php
+                $query = $mysqli->query("SELECT * FROM alumno");
+                while ($valores = mysqli_fetch_array($query)) {
+                    echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . "  " . $valores["cuota"] . "</a>";
+                }
+                ?>
+            </td>
+
+            <!--- Sacar Accion de borrar --->
+            <td>
+                <?php
+                $query = $mysqli->query("SELECT * FROM alumno");
+                while ($valores = mysqli_fetch_array($query)) {
+                    echo  "<br/> " . "<a href='././agregarAumno.php?id_borrado=$valores[id]' </a>" . " borrar" . "</a>";
+                }
+                ?>
+
+            </td>
         </tr>
     </table>
+
 </body>
 
 </html>

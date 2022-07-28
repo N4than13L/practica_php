@@ -94,7 +94,7 @@ if (isset($_GET['id_borrado'])) {
         <br />
         <br />
 
-        <input type="submit" value="Enviar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" />
 
         <button onclick="window.location.href='AgregarPadre.php'" type="button" name="nuevo">Nuevo</button>
     </form>

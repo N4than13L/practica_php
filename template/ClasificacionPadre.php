@@ -100,7 +100,7 @@ if (!empty($_POST)) {
         <input type="text" placeholder="agrega el nombre" name="txtpadreClas" id="txtpadreClas" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" />
         <br />
         <br />
-        <input type="submit" value="Enviar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" />
 
         <button onclick="window.location.href='ClasificacionPadre.php'" type="button" name="nuevo">Nuevo</button>
 
