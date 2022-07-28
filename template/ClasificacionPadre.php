@@ -2,18 +2,26 @@
 require("../assets/function/conexion.php");
 $mysqli = call_mysqli();
 
-if (!empty($_GET["id"])) {
-
-    $mysqli = call_mysqli();
-    $sql = "SELECT nombre FROM padre_clasificacion WHERE id = " . $_GET["id"];
-    $resPerfil = $mysqli->query($sql);
-    $rowPerfil = $resPerfil->fetch_assoc();
-
-    // print_r($rowPerfil);
-    $valor = implode(" ", $rowPerfil);
-    //var_dump($valor);
+// DECLADO UNA VARIABLE PARA ALMACENAR EL ID
+$codigo = 0;
+// PREGUNTO SI ME ESTAN ENVIANDO EL ID POR EL METODO GET
+// EN CASO DE SER ASI ENTONCES SIGNIFICA QUE 
+// ESTAN SELECCIONANDO UN REGISTRO - (PADRE TUTOR EN ESTE CASO)
+if (isset($_GET['id'])) {
+    // AQUI EXTRAIGO LA VARIABLE DE LA URL
+    // AL FINAL LE ASIGNO + 0 POR SEGURIDAD EN CASO DE QUE ESTEN ENVIANDO
+    // UN CARACTER Y NO UN VALOR NUMERICO COMO DEBERIA SER
+    $codigo = $_GET['id'] + 0;
+    // PROCEDO A BUSCAR EL CODIGO QUE ME EVIARON, EN LA BASE DE DATOS
+    $sql = "SELECT * FROM padre_clasificacion WHERE id='$codigo'";
+    // EJECUTO EL SQL Y LO ASIGNO A UNA VARIABLE RESULTADO
+    $result = $mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
+    // YA QUE TENGO TODA LA INFORMACION DEL SELECT EN LA VARIBLE RESULTADO LO BUSCO
+    // Y SELECCIONO LA PRIMERA FILA CON LA FUNCION RESULT Y CON LA SUB-FUNCTION fetch_assoc
+    // SELECCIONO LA PRIMERA FILA DEL SELECT
+    // EN ROW YA TENGO EL ARRAY DE DATOS
+    $row = $result->fetch_assoc();
 }
-
 // Cuando se actualiza un registo de una tabla 
 if (isset($_POST["btnActualizar"])) {
 
@@ -39,13 +47,23 @@ if (!empty($_GET["id_borrado"])) {
 }
 
 
+// Agregar y/o actuaizar registro de la tabla.
+if (!empty($_POST)) {
 
-if (!empty($_POST["btnEnviar"])) {
-    $padreClasificacion = $_POST["txtpadreClas"];
-    if (!empty($padreClasificacion)) {
-        $sql = "INSERT INTO  padre_Clasificacion (nombre) VALUE('$padreClasificacion')";
-        $result = $mysqli->query($sql);
-        //or trigger_error($mysqli->error . " [$sql]");
+    $idActualizar = $_GET["id"];
+    $curso = $_POST["txtpadreClas"];
+
+    if (!empty($curso)) {
+        $mysqli = call_mysqli();
+        if ($idActualizar > 0) {
+            $sql = "UPDATE padre_Clasificacion SET nombre = '$curso' WHERE id = '$idActualizar'";
+        } else {
+            $sql = "INSERT INTO padre_Clasificacion (nombre) VALUE('$curso')";
+        }
+        $resPerfil = $mysqli->query($sql);
+
+        echo $curso;
+        header("location: ./ClasificacionPadre.php");
     }
 }
 ?>
@@ -72,19 +90,22 @@ if (!empty($_POST["btnEnviar"])) {
 
     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
         <h3>Agregar clasificaion padre</h3>
-        <label for="txtpadreClas">Nombre:</label>
-        <input type="text" placeholder="agrega el nombre" name="txtpadreClas" id="txtpadreClas" value="<?php
-                                                                                                        if ($_GET) {
-                                                                                                            echo $valor;
-                                                                                                        }
-                                                                                                        echo "";
 
-                                                                                                        ?>" />
+        <label for="txtCursoClas">Código</label>
+        <input type="text" name="txtCodigo" id="txtCodigo" value="<?php echo (isset($_GET['id']) ? $row['id'] : '') ?>" readonly />
         <br />
         <br />
-        <input type="submit" value="btnEnviar" />
-        <input type="submit" value="Actualizar" name="btnActualizar" />
+
+        <label for="txtpadreClas">Nombre:</label>
+        <input type="text" placeholder="agrega el nombre" name="txtpadreClas" id="txtpadreClas" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" />
+        <br />
+        <br />
+        <input type="submit" value="Enviar" name="btnEnviar" />
+
+        <button onclick="window.location.href='ClasificacionPadre.php'" type="button" name="nuevo">Nuevo</button>
+
     </form>
+
 
     <table style="border: 1px;">
         <tr>
@@ -102,6 +123,7 @@ if (!empty($_POST["btnEnviar"])) {
             </th>
         </tr>
     </table>
+
 </body>
 
 </html>
