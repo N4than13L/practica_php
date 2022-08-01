@@ -34,18 +34,21 @@ if (!empty($_POST)) {
     $cuota = $_POST["txtCuota"];
 
     $curso_id = $_POST["cboCurso"];
-    echo $curso_id;
+    $padre_Clas = $_POST["cboPadre"];
+    $curso_Class = $_POST["cboCursoClass"];
 
-    if (!empty($nombre && !empty($apellido) && !empty($edad) && !empty($cuota))) {
+
+    if (!empty($nombre && !empty($apellido) && !empty($edad) && !empty($cuota) && !empty($curso_id) && !empty($padre_Clas) && !empty($curso_Class))) {
         $mysqli = call_mysqli();
         if ($idActualizar > 0) {
-            $sql = "UPDATE alumno SET nombre='$nombre', apellido='$apellido', edad='$edad', cuota='$cuota', curso_id='$curso_id' WHERE id = '$idActualizar'";
+            $sql = "UPDATE alumno SET nombre='$nombre', apellido='$apellido', edad='$edad', cuota='$cuota', curso_id='$curso_id', curso_clasificacion_id='$curso_Class' , padre_clasificacion_id='$padre_Clas' WHERE id = '$idActualizar'";
         } else {
-            $sql = "INSERT INTO alumno (nombre, apellido, edad, cuota, curso_id) VALUE('$nombre', '$apellido', '$edad', '$cuota','$curso_id')";
+            $sql = "INSERT INTO alumno (nombre, apellido, edad, cuota, curso_id, curso_clasificacion_id, padre_clasificacion_id) VALUE('$nombre', '$apellido', '$edad', '$cuota','$curso_id', '$curso_Class',  '$padre_Clas')";
         }
+
         $resPerfil = $mysqli->query($sql);
 
-        //header("location: ./agregarAumno.php");
+        header("location: ./agregarAumno.php");
     }
 }
 
@@ -80,7 +83,7 @@ if (!empty($_GET["id_borrado"])) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form onsubmit="enviarAlumno()" method="POST">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
         <h3>Agregar Alumno</h3>
         <!-- TODO: DEBES AGREGAR EL INPUT QUE HICE EN PADRE TUTOR Y ARREGLAR LA CONDICION DE UNA SOLA LINEA -->
 
@@ -113,45 +116,63 @@ if (!empty($_GET["id_borrado"])) {
             $query = $mysqli->query("SELECT * FROM curso");
             while ($valores = mysqli_fetch_array($query)) {
                 if (isset($_GET["id"])) {
-                    if (isset($_GET["curso_id"]) == isset($_GET["id"])) {
-                        echo '<option value="' . $valores['id'] . '" selected>' . $valores['nombre'] . '</option>';
+                    if ($row["curso_id"] == $valores["id"]) {
+                        echo '<option  value="' . $valores["id"] . '" selected>' . $valores["nombre"] . '</option>';
                     } else {
-                        echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] . '</option>';
+                        echo '<option value="' . $valores["id"] . '">' . $valores["nombre"] . '</option>';
                     }
                 } else {
-                    echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] . '</option>';
+                    echo '<option value="' . $valores["id"] . '">' . $valores["nombre"] . '</option>';
+                }
+            }
+
+            ?>
+        </select>
+
+        <br />
+        <br />
+        <label for="optClasificacion">clasificacion:</label>
+        <select name="cboCursoClass">
+            <option value="0">clasificacion del curso</option>
+            <?php
+            $query = $mysqli->query("SELECT * FROM curso_clasificacion");
+            while ($valores = mysqli_fetch_array($query)) {
+                if (isset($_GET["id"])) {
+                    if ($row["curso_clasificacion_id"] == $valores["id"]) {
+                        echo '<option  value="' . $valores["id"] . '" selected>' . $valores["nombre"] . '</option>';
+                    } else {
+                        echo '<option value="' . $valores["id"] . '">' . $valores["nombre"] . '</option>';
+                    }
+                } else {
+                    echo '<option value="' . $valores["id"] . '">' . $valores["nombre"] . '</option>';
                 }
             }
             ?>
         </select>
 
+
         <br />
         <br />
-        <label for="optPadre">padre/tutor:</label>
-        <select>
+        <label for="cboPadre">padre/tutor:</label>
+        <select name="cboPadre">
             <option value="0">padre/tutor:</option>
             <?php
             $query = $mysqli->query("SELECT * FROM padre_clasificacion");
             while ($valores = mysqli_fetch_array($query)) {
-                echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] .
-                    '</option>';
+                if (isset($_GET["id"])) {
+                    if ($row["padre_clasificacion_id"] == $valores["id"]) {
+                        echo '<option  value="' . $valores["id"] . '" selected>' . $valores["nombre"] . '</option>';
+                    } else {
+                        echo '<option value="' . $valores["id"] . '">' . $valores["nombre"] . '</option>';
+                    }
+                } else {
+                    echo '<option value="' . $valores["id"] . '">' . $valores["nombre"] . '</option>';
+                }
             }
             ?>
         </select>
 
 
-        <br />
-        <br />
-        <label for="optClasificacion">clasificacion:</label>
-        <select>
-            <option value="0">clasificacion del curso</option>
-            <?php
-            $query = $mysqli->query("SELECT * FROM curso_clasificacion");
-            while ($valores = mysqli_fetch_array($query)) {
-                echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] . '</option>';
-            }
-            ?>
-        </select>
 
 
         <br />
@@ -198,7 +219,7 @@ if (!empty($_GET["id_borrado"])) {
             <td>
                 <?php
                 $query = $mysqli->query("SELECT * FROM alumno");
-                while ($valores = mysqli_fetch_array($query)) {
+                while ($valores = mysqli_fetch_assoc($query)) {
                     echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . " " . $valores["edad"] . " años" . "</a>";
                 }
                 ?>
