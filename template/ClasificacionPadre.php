@@ -102,7 +102,7 @@ if (!empty($_POST)) {
         <br />
         <input type="submit" value="Guardar" name="btnEnviar" />
 
-        <button onclick="window.location.href='ClasificacionPadre.php'" type="button" name="nuevo">Nuevo</button>
+        <input type="button" onclick="resetform()" value="Nuevo">
 
     </form>
 
@@ -123,6 +123,26 @@ if (!empty($_POST)) {
             </th>
         </tr>
     </table>
+
+    <script>
+        function resetform() {
+            $("form select").each(function() {
+                this.selectedIndex = 0
+            });
+            $("form input[type=text]").each(function() {
+                this.value = ''
+            });
+
+            var url = window.location.toString();
+            if (url.indexOf("?") > 0) {
+                var clean_uri = url.substring(0, url.indexOf("?"));
+                window.history.replaceState({}, document.title, clean_uri);
+            }
+
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 </body>
 

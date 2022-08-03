@@ -83,7 +83,7 @@ if (!empty($_GET["id_borrado"])) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmAlumno">
         <h3>Agregar Alumno</h3>
         <!-- TODO: DEBES AGREGAR EL INPUT QUE HICE EN PADRE TUTOR Y ARREGLAR LA CONDICION DE UNA SOLA LINEA -->
 
@@ -172,14 +172,11 @@ if (!empty($_GET["id_borrado"])) {
             ?>
         </select>
 
-
-
-
         <br />
         <br />
         <input type="submit" value="Guardar" name="btnEnviar" />
 
-        <button onclick="window.location.href='agregarAumno.php'" type="button" name="nuevo">Nuevo</button>
+        <input type="button" onclick="resetform()" value="Nuevo">
     </form>
 
     <br />
@@ -247,6 +244,28 @@ if (!empty($_GET["id_borrado"])) {
             </td>
         </tr>
     </table>
+
+    <script>
+        function resetform() {
+            $("#frmAlumno select").each(function() {
+                this.selectedIndex = 0
+            });
+            $("form input[type=text]").each(function() {
+                this.value = ''
+            });
+            $("#frmAlumno input[type=number]").each(function() {
+                this.value = ''
+            });
+
+            var url = window.location.toString();
+            if (url.indexOf("?") > 0) {
+                var clean_uri = url.substring(0, url.indexOf("?"));
+                window.history.replaceState({}, document.title, clean_uri);
+            }
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 </body>
 

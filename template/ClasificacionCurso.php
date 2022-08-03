@@ -29,7 +29,7 @@ if (!empty($_GET["id_borrado"])) {
     $mysqli = call_mysqli();
     $sql = "DELETE  FROM curso_clasificacion WHERE id = " . $_GET["id_borrado"];
     $resPerfil = $mysqli->query($sql);
-    header("location: ./ClasificacionCurso.php");
+    //header("location: ./ClasificacionCurso.php");
 }
 
 
@@ -47,8 +47,8 @@ if (!empty($_POST)) {
         }
         $resPerfil = $mysqli->query($sql);
 
-        echo $curso;
-        header("location: ./ClasificacionCurso.php");
+
+        //header("location: ./ClasificacionCurso.php");
     }
 }
 
@@ -89,7 +89,7 @@ if (!empty($_POST)) {
 
         <input type="submit" value="Guardar" name="btnEnviar" />
 
-        <button onclick="window.location.href='ClasificacionCurso.php'" type="button" name="nuevo">Nuevo</button>
+        <input type="button" onclick="resetform()" value="Nuevo">
     </form>
 
     <table style="border: 1px;">
@@ -109,21 +109,28 @@ if (!empty($_POST)) {
         </tr>
     </table>
 
+    <script>
+        function resetform() {
+            $("form select").each(function() {
+                this.selectedIndex = 0
+            });
+            $("form input[type=text]").each(function() {
+                this.value = ''
+            });
+
+
+
+            var url = window.location.toString();
+            if (url.indexOf("?") > 0) {
+                var clean_uri = url.substring(0, url.indexOf("?"));
+                window.history.replaceState({}, document.title, clean_uri);
+            }
+
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 </body>
 
 </html>
-
-
-<!--- <div>
-        <br />
-        <select>
-            <option value="0">Curso</option>
-            /*<?php
-                //$query = $mysqli->query("SELECT * FROM curso_clasificacion");
-                //while ($valores = mysqli_fetch_array($query)) {
-                //   echo '<option value="' . $valores['id'] . '">' . $valores['nombre'] . '</option>';
-                //}
-
-                ?> */
-        </select>
-    </div> -->

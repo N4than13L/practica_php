@@ -29,7 +29,7 @@ if (!empty($_GET["id_borrado"])) {
     $mysqli = call_mysqli();
     $sql = "DELETE  FROM curso WHERE id = " . $_GET["id_borrado"];
     $resPerfil = $mysqli->query($sql);
-    header("location: ./agregarCurso.php");
+    //header("location: ./agregarCurso.php");
 }
 
 // Agregar y/o actuaizar registro de la tabla.
@@ -46,15 +46,15 @@ if (!empty($_POST)) {
             $sql = "INSERT INTO curso (nombre) VALUE('$curso')";
         }
         $resPerfil = $mysqli->query($sql);
-
-        echo $curso;
-        header("location: ./agregarCurso.php");
+        //header("location: ./agregarCurso.php");
     }
 }
 
-
-
+//echo "Estás usando Ajax <br> " . $_POST["txtCurso"];
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -63,6 +63,9 @@ if (!empty($_POST)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrega Curso</title>
+
+    <script src="../assets/js/peticion1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -86,17 +89,16 @@ if (!empty($_POST)) {
         <br />
 
         <label for="txtCurso">Nombre:</label>
-        <input type="text" name="txtCurso" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" id="txtCurso" placeholder="agrega el nombre" />
+        <input type="text" name="txtCurso" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" id="TxtCurso" placeholder="agrega el nombre" />
         <br />
         <br />
-        <input type="submit" value="Guardar" name="btnEnviar" />
 
-        <button onclick="window.location.href='agregarCurso.php'" type="button" name="nuevo">Nuevo</button>
+        <input type="button" href="javascript:;" value="Guardar" onclick="Hola($('#TxtCurso').val())" class="enviar" name="btnEnviar" />
+
+        <input type="button" onclick="resetform()" value="Nuevo">
     </form>
 
-
-
-    <table style="border: 1px;">
+    <table id="resultado" style="border: 1px;">
         <tr>
             <th>Cursos</th>
         </tr>
@@ -114,6 +116,25 @@ if (!empty($_POST)) {
             </th>
         </tr>
     </table>
+    <script>
+        function resetform() {
+            $("#frmAlumno select").each(function() {
+                this.selectedIndex = 0
+            });
+            $("form input[type=text]").each(function() {
+                this.value = ''
+            });
+            $("#frmAlumno input[type=number]").each(function() {
+                this.value = ''
+            });
+
+            var url = window.location.toString();
+            if (url.indexOf("?") > 0) {
+                var clean_uri = url.substring(0, url.indexOf("?"));
+                window.history.replaceState({}, document.title, clean_uri);
+            }
+        }
+    </script>
 
 
 </body>
