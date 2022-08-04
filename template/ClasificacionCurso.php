@@ -62,6 +62,10 @@ if (!empty($_POST)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Clasificacion de curso</title>
+    <script src="../assets/js/peticion.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -74,7 +78,7 @@ if (!empty($_POST)) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmClasCurso">
         <h3>Agregar clasificacion de curso</h3>
 
         <label for="txtCursoClas">Código</label>
@@ -83,11 +87,11 @@ if (!empty($_POST)) {
         <br />
 
         <label for="txtCursoClas">Nombre:</label>
-        <input type="text" placeholder="agrega el nombre" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" name="txtCursoClas" id="txtCusoClas" />
+        <input type="text" placeholder="agrega el nombre" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" name="txtCursoClas" id="txtCursoClas" />
         <br />
         <br />
 
-        <input type="submit" value="Guardar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" id="btnEnviar" />
 
         <input type="button" onclick="resetform()" value="Nuevo">
     </form>
@@ -109,28 +113,36 @@ if (!empty($_POST)) {
         </tr>
     </table>
 
-    <script>
-        function resetform() {
-            $("form select").each(function() {
-                this.selectedIndex = 0
-            });
-            $("form input[type=text]").each(function() {
-                this.value = ''
-            });
-
-
-
-            var url = window.location.toString();
-            if (url.indexOf("?") > 0) {
-                var clean_uri = url.substring(0, url.indexOf("?"));
-                window.history.replaceState({}, document.title, clean_uri);
-            }
-
-        }
-    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#btnEnviar').click(function() {
+                var datos = $('#frmClasCurso').serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "ClasificacionCurso.php",
+                    data: datos,
+                    sucess: function(r) {
+                        if (r == 1) {
+                            alert("agregado con exito")
+
+                            $("#txtCursoClas").each(function() {
+                                this.value = ''
+                            })
+                        } else {
+                            alert("upps algo anda mal")
+                        }
+                    }
+                })
+
+                return false
+
+            })
+        })
+    </script>
 </body>
 
 </html>

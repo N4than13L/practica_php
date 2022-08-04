@@ -70,6 +70,11 @@ if (!empty($_GET["id_borrado"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Alumno</title>
+    <script src="../assets/js/peticion.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -174,7 +179,7 @@ if (!empty($_GET["id_borrado"])) {
 
         <br />
         <br />
-        <input type="submit" value="Guardar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" id="btnEnviar" />
 
         <input type="button" onclick="resetform()" value="Nuevo">
     </form>
@@ -245,26 +250,30 @@ if (!empty($_GET["id_borrado"])) {
         </tr>
     </table>
 
-    <script>
-        function resetform() {
-            $("#frmAlumno select").each(function() {
-                this.selectedIndex = 0
-            });
-            $("form input[type=text]").each(function() {
-                this.value = ''
-            });
-            $("#frmAlumno input[type=number]").each(function() {
-                this.value = ''
-            });
 
-            var url = window.location.toString();
-            if (url.indexOf("?") > 0) {
-                var clean_uri = url.substring(0, url.indexOf("?"));
-                window.history.replaceState({}, document.title, clean_uri);
-            }
-        }
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#btnEnviar').click(function() {
+                var datos = $('#frmAlumno').serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "agregarAumno.php",
+                    data: datos,
+                    sucess: function(r) {
+                        if (r == 1) {
+                            alert("agregado con exito")
+                        } else {
+                            alert("upps algo anda mal")
+                        }
+                    }
+                })
+
+                return false
+
+            })
+        })
     </script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 </body>

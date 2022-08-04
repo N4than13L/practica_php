@@ -64,8 +64,11 @@ if (!empty($_POST)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrega Curso</title>
 
-    <script src="../assets/js/peticion1.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../assets/js/peticion.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -79,7 +82,7 @@ if (!empty($_POST)) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmCurso">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmCurso" role="form">
         <h3>Agregar Curso</h3>
         <!-- TODO: DEBES AGREGAR EL INPUT QUE HICE EN PADRE TUTOR Y ARREGLAR LA CONDICION DE UNA SOLA LINEA -->
 
@@ -89,16 +92,20 @@ if (!empty($_POST)) {
         <br />
 
         <label for="txtCurso">Nombre:</label>
-        <input type="text" name="txtCurso" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" id="TxtCurso" placeholder="agrega el nombre" />
+        <input type="text" name="txtCurso" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" id="txtCurso" placeholder="agrega el nombre" />
         <br />
         <br />
 
-        <input type="button" href="javascript:;" value="Guardar" onclick="Hola($('#TxtCurso').val())" class="enviar" name="btnEnviar" />
+        <button type="button" class="enviar" id="btnEnviar" name="btnEnviar">Guardar</button>
+
+        <!-- <input type="button" value="Guardar" class="enviar" name="btnEnviar" /> -->
 
         <input type="button" onclick="resetform()" value="Nuevo">
     </form>
 
-    <table id="resultado" style="border: 1px;">
+    <h2 id="respuesta"></h2>
+
+    <table>
         <tr>
             <th>Cursos</th>
         </tr>
@@ -116,26 +123,35 @@ if (!empty($_POST)) {
             </th>
         </tr>
     </table>
-    <script>
-        function resetform() {
-            $("#frmAlumno select").each(function() {
-                this.selectedIndex = 0
-            });
-            $("form input[type=text]").each(function() {
-                this.value = ''
-            });
-            $("#frmAlumno input[type=number]").each(function() {
-                this.value = ''
-            });
 
-            var url = window.location.toString();
-            if (url.indexOf("?") > 0) {
-                var clean_uri = url.substring(0, url.indexOf("?"));
-                window.history.replaceState({}, document.title, clean_uri);
-            }
-        }
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#btnEnviar').click(function() {
+                var datos = $('#frmCurso').serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "agregarCurso.php",
+                    data: datos,
+                    sucess: function(r) {
+                        if (r == 1) {
+                            alert("agregado con exito")
+
+                            $("#txtCurso").each(function() {
+                                this.value = ''
+                            })
+                        } else {
+                            alert("upps algo anda mal")
+                        }
+                    }
+                })
+
+                return false
+
+            })
+
+        })
     </script>
-
 
 </body>
 

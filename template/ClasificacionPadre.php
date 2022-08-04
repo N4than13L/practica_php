@@ -32,9 +32,7 @@ if (isset($_POST["btnActualizar"])) {
         $mysqli = call_mysqli();
         $sql = "UPDATE padre_Clasificacion SET nombre = '$curso' WHERE id = '$idActualizar'";
         $resPerfil = $mysqli->query($sql);
-
-        echo $curso;
-        header("location: ./ClasificacionPadre.php");
+        //header("location: ./ClasificacionPadre.php");
     }
 }
 
@@ -61,9 +59,7 @@ if (!empty($_POST)) {
             $sql = "INSERT INTO padre_Clasificacion (nombre) VALUE('$curso')";
         }
         $resPerfil = $mysqli->query($sql);
-
-        echo $curso;
-        header("location: ./ClasificacionPadre.php");
+        //header("location: ./ClasificacionPadre.php");
     }
 }
 ?>
@@ -76,6 +72,10 @@ if (!empty($_POST)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Clasificacion de padre</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -88,7 +88,7 @@ if (!empty($_POST)) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmCasPadre">
         <h3>Agregar clasificaion padre</h3>
 
         <label for="txtCursoClas">Código</label>
@@ -97,10 +97,10 @@ if (!empty($_POST)) {
         <br />
 
         <label for="txtpadreClas">Nombre:</label>
-        <input type="text" placeholder="agrega el nombre" name="txtpadreClas" id="txtpadreClas" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" />
+        <input type="text" placeholder="agrega el nombre" name="txtpadreClas" id="txtPadreClas" value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" />
         <br />
         <br />
-        <input type="submit" value="Guardar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" id="btnEnviar" />
 
         <input type="button" onclick="resetform()" value="Nuevo">
 
@@ -124,25 +124,40 @@ if (!empty($_POST)) {
         </tr>
     </table>
 
-    <script>
-        function resetform() {
-            $("form select").each(function() {
-                this.selectedIndex = 0
-            });
-            $("form input[type=text]").each(function() {
-                this.value = ''
-            });
 
-            var url = window.location.toString();
-            if (url.indexOf("?") > 0) {
-                var clean_uri = url.substring(0, url.indexOf("?"));
-                window.history.replaceState({}, document.title, clean_uri);
-            }
 
-        }
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#btnEnviar').click(function() {
+                var datos = $('#frmCasPadre').serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "ClasificacionPadre.php",
+                    data: datos,
+                    sucess: function(r) {
+                        if (r == 1) {
+                            alert("agregado con exito")
+
+                            $("#txtPadreClas").each(function() {
+                                this.value = ''
+                            })
+                        } else {
+                            alert("upps algo anda mal")
+                        }
+                    }
+                })
+
+                return false
+
+            })
+        })
     </script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="../assets/js/peticion.js"></script>
+
+
 
 </body>
 

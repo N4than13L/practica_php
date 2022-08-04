@@ -65,6 +65,7 @@ if (isset($_GET['id_borrado'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Padre</title>
+    <script src="../assets/js/peticion.js"></script>
 </head>
 
 <body>
@@ -78,7 +79,7 @@ if (isset($_GET['id_borrado'])) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmCursoClas">
         <h3>Agregar padre</h3>
         <!-- EN TODOS LOS FORMULARIOS DEBERIA TENER UN INPU CODIGO
         ESTO ME AYUDARA A IDENTIFICAR CUAL ID DE REGISTRO TENGO SELECCIONADO -->
@@ -94,7 +95,7 @@ if (isset($_GET['id_borrado'])) {
         <br />
         <br />
 
-        <input type="submit" value="Guardar" name="btnEnviar" />
+        <input type="submit" value="Guardar" name="btnEnviar" id="btnEnviar" />
 
         <input type="button" onclick="resetform()" value="Nuevo">
     </form>
@@ -119,24 +120,35 @@ if (isset($_GET['id_borrado'])) {
         </tr>
     </table>
 
-    <script>
-        function resetform() {
-            $("form select").each(function() {
-                this.selectedIndex = 0
-            });
-            $("form input[type=text]").each(function() {
-                this.value = ''
-            });
-            var url = window.location.toString();
-            if (url.indexOf("?") > 0) {
-                var clean_uri = url.substring(0, url.indexOf("?"));
-                window.history.replaceState({}, document.title, clean_uri);
-            }
-        }
-    </script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#btnEnviar').click(function() {
+                var datos = $('#frmPadre').serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "agregarPadre.php",
+                    data: datos,
+                    sucess: function(r) {
+                        if (r == 1) {
+                            alert("agregado con exito")
+
+                            $("#txtPadre").each(function() {
+                                this.value = ''
+                            })
+                        } else {
+                            alert("upps algo anda mal")
+                        }
+                    }
+                })
+
+                return false
+
+            })
+        })
+    </script>
 </body>
 
 </html>
