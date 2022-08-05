@@ -115,6 +115,7 @@ if (isset($_GET['id_borrado'])) {
                 }
 
                 ?>
+                <div id="contenido"></div>
 
             </th>
         </tr>
@@ -139,6 +140,11 @@ if (isset($_GET['id_borrado'])) {
                         }
                     }
                 })
+                var padre = $('#txtPadre')
+                $('#contenido').append("<a href='agregarPadre.php?'>" + padre.val() + "</a>" + "<br/>")
+
+                alert("padre agregado con exito " +
+                    padre.val())
 
                 resetform()
 

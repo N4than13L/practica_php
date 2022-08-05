@@ -48,7 +48,7 @@ if (!empty($_POST)) {
 
         $resPerfil = $mysqli->query($sql);
 
-        header("location: ./agregarAumno.php");
+        //  header("location: ./agregarAumno.php");
     }
 }
 
@@ -57,7 +57,7 @@ if (!empty($_GET["id_borrado"])) {
     $mysqli = call_mysqli();
     $sql = "DELETE  FROM alumno WHERE id = " . $_GET["id_borrado"];
     $resPerfil = $mysqli->query($sql);
-    header("location: ./agregarAumno.php");
+    //header("location: ./agregarAumno.php");
 }
 
 
@@ -207,6 +207,7 @@ if (!empty($_GET["id_borrado"])) {
                     echo "<br/>" . "<a href='./agregarAumno.php?id=$valores[id]'>" . " " . $valores['nombre']  . "</a>";
                 }
                 ?>
+                <div id="contenido"></div>
             </td>
 
             <!--- Sacar Apellido en su fila correspondiente --->
@@ -270,6 +271,15 @@ if (!empty($_GET["id_borrado"])) {
                         }
                     }
                 })
+
+                var nombreAlumno = $('#txtNombre')
+                var apllidoAlumno = $('#txtApellido')
+                //var edadAlumno = $('#txtEdad')
+
+                $('#contenido').append("<a href='agregarAumno.php?'>" + nombreAlumno.val() + "</a>" + "<br/>")
+
+                alert("alumno agregado con exito " +
+                    nombreAlumno.val() + " " + apllidoAlumno.val())
                 resetform()
 
                 return false

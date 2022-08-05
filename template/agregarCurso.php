@@ -29,7 +29,6 @@ if (!empty($_GET["id_borrado"])) {
     $mysqli = call_mysqli();
     $sql = "DELETE  FROM curso WHERE id = " . $_GET["id_borrado"];
     $resPerfil = $mysqli->query($sql);
-    //header("location: ./agregarCurso.php");
 }
 
 // Agregar y/o actuaizar registro de la tabla.
@@ -46,11 +45,9 @@ if (!empty($_POST)) {
             $sql = "INSERT INTO curso (nombre) VALUE('$curso')";
         }
         $resPerfil = $mysqli->query($sql);
-        //header("location: ./agregarCurso.php");
     }
 }
 
-//echo "Estás usando Ajax <br> " . $_POST["txtCurso"];
 ?>
 
 
@@ -96,15 +93,12 @@ if (!empty($_POST)) {
         <br />
         <br />
 
-        <button type="button" class="enviar" id="btnEnviar" name="btnEnviar">Guardar</button>
-
-        <!-- <input type="button" value="Guardar" class="enviar" name="btnEnviar" /> -->
+        <input type="submit" class="enviar" id="btnEnviar" name="btnEnviar" value="Guadar" />
 
         <input type="button" onclick="resetform()" value="Nuevo">
     </form>
 
-    <h2 id="respuesta"></h2>
-
+    <br />
     <table>
         <tr>
             <th>Cursos</th>
@@ -120,6 +114,10 @@ if (!empty($_POST)) {
 
                 ?>
 
+                <div id="contenido">
+                    <a id="borrar"></a>
+                </div>
+
             </th>
         </tr>
     </table>
@@ -134,17 +132,17 @@ if (!empty($_POST)) {
                     url: "agregarCurso.php",
                     data: datos,
                     sucess: function(r) {
-                        if (r == 1) {
-                            alert("agregado con exito")
-                        } else {
-                            alert("upps algo anda mal")
-                        }
+                        alert("agregado con exito", r)
                     }
                 })
 
+                var curso = $('#txtCurso')
+                $('#contenido').append("<a href='agregarCurso.php?'>" + curso.val() + "</a>" + "<br/>")
+
+                alert("Curso agregado con exito " + curso.val())
+
                 resetform()
                 return false
-
             })
 
         })

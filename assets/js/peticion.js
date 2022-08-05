@@ -16,4 +16,6 @@ function resetform() {
       var clean_uri = url.substring(0, url.indexOf("?"));
       window.history.replaceState({}, document.title, clean_uri);
   }
+
 }
+

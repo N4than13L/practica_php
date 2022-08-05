@@ -120,12 +120,10 @@ if (!empty($_POST)) {
                     echo " " . "<a href='./ClasificacionPadre.php?id_borrado=$valores[id]' </a>" . " borrar" . "</a>";
                 }
                 ?>
+                <div id="contenido"></div>
             </th>
         </tr>
     </table>
-
-
-
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -144,6 +142,12 @@ if (!empty($_POST)) {
                         }
                     }
                 })
+
+                var padreClasificacion = $('#txtPadreClas')
+                $('#contenido').append("<a href='ClasificacionPadre.php?'>" + padreClasificacion.val() + "</a>" + "<br/>")
+
+                alert("padre agregado con exito " +
+                    padreClasificacion.val())
 
                 resetform()
                 return false
