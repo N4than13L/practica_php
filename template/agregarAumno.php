@@ -70,6 +70,7 @@ if (!empty($_GET["id_borrado"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Alumno</title>
+
     <script src="../assets/js/peticion.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -179,7 +180,8 @@ if (!empty($_GET["id_borrado"])) {
 
         <br />
         <br />
-        <input type="submit" value="Guardar" name="btnEnviar" id="btnEnviar" />
+        <button type="submit" name="btnEnviar" id="btnEnviar">Guardar</button>
+
 
         <input type="button" onclick="resetform()" value="Nuevo">
     </form>
@@ -268,6 +270,7 @@ if (!empty($_GET["id_borrado"])) {
                         }
                     }
                 })
+                resetform()
 
                 return false
 

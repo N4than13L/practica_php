@@ -79,7 +79,7 @@ if (isset($_GET['id_borrado'])) {
         <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
-    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmCursoClas">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmPadre">
         <h3>Agregar padre</h3>
         <!-- EN TODOS LOS FORMULARIOS DEBERIA TENER UN INPU CODIGO
         ESTO ME AYUDARA A IDENTIFICAR CUAL ID DE REGISTRO TENGO SELECCIONADO -->
@@ -134,15 +134,13 @@ if (isset($_GET['id_borrado'])) {
                     sucess: function(r) {
                         if (r == 1) {
                             alert("agregado con exito")
-
-                            $("#txtPadre").each(function() {
-                                this.value = ''
-                            })
                         } else {
                             alert("upps algo anda mal")
                         }
                     }
                 })
+
+                resetform()
 
                 return false
 

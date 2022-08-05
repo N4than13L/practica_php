@@ -139,16 +139,13 @@ if (!empty($_POST)) {
                     sucess: function(r) {
                         if (r == 1) {
                             alert("agregado con exito")
-
-                            $("#txtPadreClas").each(function() {
-                                this.value = ''
-                            })
                         } else {
                             alert("upps algo anda mal")
                         }
                     }
                 })
 
+                resetform()
                 return false
 
             })

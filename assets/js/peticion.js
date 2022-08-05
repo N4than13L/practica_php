@@ -1,5 +1,5 @@
 function resetform() {
-  $("#frmAlumno select").each(function() {
+  $("form select").each(function() {
       this.selectedIndex = 0
   })
 
@@ -7,7 +7,7 @@ function resetform() {
       this.value = ''
   })
   
-  $("#frmAlumno input[type=number]").each(function() {
+  $("form input[type=number]").each(function() {
       this.value = ''
   })
 
