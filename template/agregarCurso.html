@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrega Curso</title>
+
+    <script src="../assets/js/peticion.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+
+    <nav>
+        <ul><a href="../index.php">Inicio</a></ul>
+        <ul><a href="./agregarAumno.php">Agregar Alumno</a></ul>
+        <ul><a href="./agregarCurso.php">Agregar Curso</a></ul>
+        <ul><a href="./AgregarPadre.php">Agregar Padre o tutor</a></ul>
+        <ul><a href="./ClasificacionCurso.php">Agregar Clasificacion del curso</a></ul>
+        <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
+    </nav>
+
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" id="frmCurso" role="form">
+        <h3>Agregar Curso</h3>
+        <!-- TODO: DEBES AGREGAR EL INPUT QUE HICE EN PADRE TUTOR Y ARREGLAR LA CONDICION DE UNA SOLA LINEA -->
+
+        <label for="txtPAdre">Código:</label>
+        <input type="text" name="txtCodigo" id="txtCodigo"  />
+        <!-- value="<?php echo (isset($_GET['id']) ? $row['id'] : '') ?>" readonly -->
+        <br />
+        <br />
+
+        <label for="txtCurso">Nombre:</label>
+        <input type="text" name="txtCurso"  id="txtCurso" placeholder="agrega el nombre" />
+        <!-- value="<?php echo (isset($_GET['id']) ? $row['nombre'] : '') ?>" -->
+        <br />
+        <br />
+
+        <input type="submit" class="enviar" id="btnEnviar" name="btnEnviar" value="Guadar" />
+
+        <input type="button" onclick="resetform()" value="Nuevo">
+    </form>
+
+    <br />
+
+    <div>
+        <p> </p>
+    </div>
+
+
+</body>
+
+</html>
