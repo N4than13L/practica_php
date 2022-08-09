@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 require("assets/function/conexion.php");
 $mysqli = call_mysqli();
 $sql = "SELECT * FROM alumno  WHERE id >= 1";
@@ -6,7 +6,7 @@ $sql = "SELECT * FROM alumno  WHERE id >= 1";
 $rePress = $mysqli->query($sql);
 $rowPerfile = $rePress->fetch_assoc();
 
-?>
+?> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,12 +20,12 @@ $rowPerfile = $rePress->fetch_assoc();
 <body>
 
     <nav>
-        <ul><a href="index.php">Inicio</a></ul>
-        <ul><a href="./template/agregarAumno.php">Agregar Alumno</a></ul>
-        <ul><a href="./template/agregarCurso.php?">Agregar Curso</a></ul>
-        <ul><a href="./template/AgregarPadre.php">Agregar Padre o tutor</a></ul>
-        <ul><a href="./template/ClasificacionCurso.php">Agregar Clasificacion del curso</a></ul>
-        <ul><a href="./template/ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
+        <ul><a href="index.html">Inicio</a></ul>
+        <ul><a href="#">Agregar Alumno</a></ul>
+        <ul><a href="./template/agregarCurso.html">Agregar Curso</a></ul>
+        <ul><a href="./template/AgregarPadre.html">Agregar Padre o tutor</a></ul>
+        <ul><a href="./template/ClasificacionCurso.html">Agregar Clasificacion del curso</a></ul>
+        <ul><a href="./template/ClasificacionPadre.html">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
 
