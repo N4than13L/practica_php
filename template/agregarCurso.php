@@ -68,22 +68,22 @@ if (!empty($_POST)) {
 <body>
   <nav>
     <ul>
-      <a href="../index.html">Inicio</a>
+      <a href="../index.php">Inicio</a>
     </ul>
     <ul>
-      <a href="#">Agregar Alumno</a>
+      <a href="./agregarAlumno.php">Agregar Alumno</a>
     </ul>
     <ul>
-      <a href="./agregarCurso.html">Agregar Curso</a>
+      <a href="./agregarCurso.php">Agregar Curso</a>
     </ul>
     <ul>
-      <a href="./AgregarPadre.html">Agregar Padre o tutor</a>
+      <a href="./agregarPadre.php">Agregar Padre o tutor</a>
     </ul>
     <ul>
-      <a href="./ClasificacionCurso.html">Agregar Clasificacion del curso</a>
+      <a href="./clasificacionCurso.php">Agregar Clasificacion del curso</a>
     </ul>
     <ul>
-      <a href="./ClasificacionPadre.html">Agregar Clasificacion del Padre o tutor</a>
+      <a href="./clasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a>
     </ul>
   </nav>
 
@@ -112,6 +112,34 @@ if (!empty($_POST)) {
       function guardar() {
         let data = new FormData(document.forms.namedItem("fileinfo"));
         fetch('../assets/function/agregar-curso.php', {
+            method: 'POST',
+            body: data
+          })
+          .then(function(response) {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw "Error en la llamada";
+            }
+          })
+          .then(function(texto) {
+            if (texto == "redirect") {
+              window.location.href = "?p=inicio";
+            } else {
+              document.getElementById("contenido").innerHTML = texto;
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+
+        limpiarFormulaio()
+      }
+
+      function borrar(codigo) {
+        let data = new FormData(document.forms.namedItem("fileinfo"));
+        data.append('codigo', codigo);
+        fetch('../assets/function/agregar-curso-eliminar.php', {
             method: 'POST',
             body: data
           })
@@ -170,7 +198,7 @@ if (!empty($_POST)) {
               </td>
               <td>
       
-                  <input type="button" onclick="resetform()" value="Quitar" />
+                  <input type="button" onclick="borrar(' . $row['id'] . ')" value="Quitar" />
       
               </td>
           </tr>';

@@ -38,7 +38,7 @@ while ($row = $result->fetch_assoc()) {
         </td>
         <td>
 
-        <a href=clasificacion?id=' . $row['id'] . ' >                    
+        <a href=clasificacionPadre?id=' . $row['id'] . ' >                    
         ' . $row["nombre"] . ' 
          </a>
 

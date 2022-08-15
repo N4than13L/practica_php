@@ -58,9 +58,9 @@ if (!empty($_POST)) {
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agrega Curso</title>
+    <title>Clasificacion del Padre</title>
 
-    <script type="text/javascript" src="../assets/js/agregarCurso.js"></script>
+    <script type="text/javascript" src="../assets/js/limpiar-inputs.js"></script>
 
     <script src="../assets/js/jquery-3.6.0.min.js"></script>
 </head>
@@ -68,28 +68,28 @@ if (!empty($_POST)) {
 <body>
     <nav>
         <ul>
-            <a href="../index.html">Inicio</a>
+            <a href="../index.php">Inicio</a>
         </ul>
         <ul>
-            <a href="#">Agregar Alumno</a>
+            <a href="./agregarAlumno.php">Agregar Alumno</a>
         </ul>
         <ul>
-            <a href="./agregarCurso.html">Agregar Curso</a>
+            <a href="./agregarCurso.php">Agregar Curso</a>
         </ul>
         <ul>
-            <a href="./AgregarPadre.html">Agregar Padre o tutor</a>
+            <a href="./agregarPadre.php">Agregar Padre o tutor</a>
         </ul>
         <ul>
-            <a href="./ClasificacionCurso.html">Agregar Clasificacion del curso</a>
+            <a href="./clasificacionCurso.php">Agregar Clasificacion del curso</a>
         </ul>
         <ul>
-            <a href="./ClasificacionPadre.html">Agregar Clasificacion del Padre o tutor</a>
+            <a href="./clasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a>
         </ul>
     </nav>
 
     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" name="fileinfo" role="form">
 
-        <h3>Agregar Curso</h3>
+        <h3>Clasificacion del Padre</h3>
         <!-- TODO: DEBES AGREGAR EL INPUT QUE HICE EN PADRE TUTOR Y ARREGLAR LA CONDICION DE UNA SOLA LINEA -->
 
         <label for="txtCodigo">Código:</label>
@@ -132,6 +132,37 @@ if (!empty($_POST)) {
                     .catch(function(error) {
                         console.log(error);
                     });
+
+                limpiarFormulaio()
+            }
+
+            function borrar(codigo) {
+                let data = new FormData(document.forms.namedItem("fileinfo"));
+
+                data.append('codigo', codigo);
+
+                fetch('../assets/function/clasificacion-padre-eliminar.php', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            throw "Error en la llamada";
+                        }
+                    })
+                    .then(function(texto) {
+                        if (texto == "redirect") {
+                            window.location.href = "?p=inicio";
+                        } else {
+                            document.getElementById("contenido").innerHTML = texto;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
                 limpiarFormulaio()
             }
         </script>
@@ -161,13 +192,15 @@ if (!empty($_POST)) {
       
               </td>
               <td>
-      
-                  ' . $row["nombre"] . '
+              
+                  <a href=clasificaionPadre?id=' . $row['id'] . ' >                    
+                  ' . $row["nombre"] . ' 
+                   </a>
       
               </td>
               <td>
       
-                  <input type="button" onclick="resetform()" value="Quitar" />
+                  <input type="button" onclick="borrar(' . $row['id'] . ')" value="Quitar" />
       
               </td>
           </tr>';

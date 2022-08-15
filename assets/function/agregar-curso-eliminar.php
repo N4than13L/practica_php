@@ -4,15 +4,13 @@ $mysqli = call_mysqli();
 if (!empty($_POST)) {
 }
 
-$idActualizar = $_POST["txtCodigo"];
-$curso = $_POST["txtCurso"];
+$idActualizar = $_POST["codigo"];
 
 if ($idActualizar > 0) {
-    $sql = "UPDATE curso SET nombre = '$curso' WHERE id = '$idActualizar'";
-} else {
-    $sql = "INSERT INTO curso (nombre) VALUE('$curso')";
+    $sql = "DELETE FROM curso WHERE id = '$idActualizar'";
+    $mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
 }
-$mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
+
 
 $sql = "SELECT * FROM curso";
 $result = $mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");

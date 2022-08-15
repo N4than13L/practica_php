@@ -25,14 +25,6 @@ if (isset($_GET['id'])) {
 }
 
 
-
-// Cuando se elimina un registo de una tabla 
-if (!empty($_GET["id_borrado"])) {
-    $mysqli = call_mysqli();
-    $sql = "DELETE  FROM alumno WHERE id = " . $_GET["id_borrado"];
-    $resPerfil = $mysqli->query($sql);
-}
-
 // Agregar y/o actuaizar registro de la tabla.
 if (!empty($_POST)) {
 
@@ -84,9 +76,9 @@ if (!empty($_POST)) {
         <ul><a href="../index.php">Inicio</a></ul>
         <ul><a href="./agregarAlumno.php">Agregar Alumno</a></ul>
         <ul><a href="./agregarCurso.php">Agregar Curso</a></ul>
-        <ul><a href="./AgregarPadre.php">Agregar Padre o tutor</a></ul>
-        <ul><a href="./ClasificacionCurso.php">Agregar Clasificacion del curso</a></ul>
-        <ul><a href="./ClasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
+        <ul><a href="./agregarPadre.php">Agregar Padre o tutor</a></ul>
+        <ul><a href="./clasificacionCurso.php">Agregar Clasificacion del curso</a></ul>
+        <ul><a href="./clasificacionPadre.php">Agregar Clasificacion del Padre o tutor</a></ul>
     </nav>
 
     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" name="fileinfo">
@@ -180,7 +172,7 @@ if (!empty($_POST)) {
 
         <br />
         <br />
-        <input type="submit" name="btnEnviar" onclick="guardar()" id="btnEnviar" value="Guardar" />
+        <input type="button" name="btnEnviar" onclick="guardar()" id="btnEnviar" value="Guardar" />
 
 
         <input type="button" onclick="limpiarFormulaio()" value="Nuevo">
@@ -189,6 +181,34 @@ if (!empty($_POST)) {
             function guardar() {
                 let data = new FormData(document.forms.namedItem("fileinfo"));
                 fetch('../assets/function/agregar-alumno.php', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            throw "Error en la llamada";
+                        }
+                    })
+                    .then(function(texto) {
+                        if (texto == "redirect") {
+                            window.location.href = "?p=inicio";
+                        } else {
+                            document.getElementById("contenido").innerHTML = texto;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+                limpiarFormulaio()
+            }
+
+            function borrar(codigo) {
+                let data = new FormData(document.forms.namedItem("fileinfo"));
+                data.append('codigo', codigo);
+                fetch('../assets/function/agregar-alumno-eliminar.php', {
                         method: 'POST',
                         body: data
                     })
@@ -221,74 +241,72 @@ if (!empty($_POST)) {
             $result = $mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
             $i = 0;
             echo '
-      <table>
-          <thead>
-              <tr>
-                  <th>Orden</th>
-                  <th>Nombre</th>
-                  <th>apllido</th>
-                  <th>edad</th>
-                  <th>cuota</th>
-                  <th>accion</th>
-              </tr>
-          </thead>
-          <tbody>';
-            while ($row = $result->fetch_assoc()) {
-                $i++;
-                echo '
-          <tr>
-              <td>
-      
-                  ' . $i . '
-      
-              </td>
-              <td>
-      
-              <a href=agregarAlumno?id=' . $row['id'] . ' >                    
-              ' . $row["nombre"] . ' 
-               </a>
-      
-              </td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Nombre</th>
+                            <th>apllido</th>
+                            <th>edad</th>
+                            <th>cuota</th>
+                            <th>accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                    while ($row = $result->fetch_assoc()) {
+                        $i++;
+                        echo '
+                     <tr>
+                    <td>
+            
+                        ' . $i . '
+            
+                    </td>
+                    <td>
+            
+                    <a href=agregarAlumno?id=' . $row['id'] . ' >                    
+                    ' . $row["nombre"] . ' 
+                    </a>
+            
+                    </td>
 
-              <td>
-      
-              <a href=agregarAlumno?id=' . $row['id'] . ' >                    
-              ' . $row["apellido"] . ' 
-               </a>
-  
-                </td>
-
-            <td>
+                    <td>
+            
+                    <a href=agregarAlumno?id=' . $row['id'] . ' >                    
+                    ' . $row["apellido"] . ' 
+                    </a>
         
-            <a href=agregarAlumno?id=' . $row['id'] . ' >                    
-            ' . $row["edad"] . ' 
-             </a>
+                        </td>
 
-            </td>
+                    <td>
+                
+                    <a href=agregarAlumno?id=' . $row['id'] . ' >                    
+                    ' . $row["edad"] . ' 
+                    </a>
 
-            <td>
-        
-                <a href=agregarAlumno?id=' . $row['id'] . ' >                    
-                  ' . $row["cuota"] . ' 
-                   </a>
+                    </td>
 
-            </td>
+                    <td>
+                
+                        <a href=agregarAlumno?id=' . $row['id'] . ' >                    
+                        ' . $row["cuota"] . ' 
+                        </a>
+
+                    </td>
 
 
-              <td>
-      
-              <input type="button" onclick="resetform()" value="Quitar" />
-      
-              </td>
-          </tr>';
-            }
+                    <td>
+            
+                    <input type="button" onclick="borrar(' . $row["id"] . ')" value="Quitar" />
+            
+                    </td>
+                </tr>';
+                    }
 
-            echo '</tbody>
-      </table>';
-
+                    echo '</tbody>
+            </table>';
             ?>
         </div>
-
 
     </form>
 </body>

@@ -4,17 +4,15 @@ $mysqli = call_mysqli();
 if (!empty($_POST)) {
 }
 
-$idActualizar = $_POST["txtCodigo"];
-$curso = $_POST["txtCurso"];
+$idActualizar = $_POST["codigo"];
 
 if ($idActualizar > 0) {
-    $sql = "UPDATE curso SET nombre = '$curso' WHERE id = '$idActualizar'";
-} else {
-    $sql = "INSERT INTO curso (nombre) VALUE('$curso')";
+    $sql = "DELETE FROM padre_clasificacion WHERE id = '$idActualizar'";
+    $mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
 }
-$mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
 
-$sql = "SELECT * FROM curso";
+
+$sql = "SELECT * FROM padre_clasificacion";
 $result = $mysqli->query($sql) or trigger_error($mysqli->error . " [$sql]");
 $i = 0;
 echo '
@@ -38,7 +36,7 @@ while ($row = $result->fetch_assoc()) {
         </td>
         <td>
 
-        <a href=agregarCurso?id=' . $row['id'] . ' >                    
+        <a href=clasificacionPadre?id=' . $row['id'] . ' >                    
         ' . $row["nombre"] . ' 
          </a>
 
